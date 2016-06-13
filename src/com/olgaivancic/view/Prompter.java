@@ -11,8 +11,9 @@ import java.io.InputStreamReader;
  */
 public class Prompter {
 
-    private Jar mJar;
+    private Jar mJar = new Jar();
     private BufferedReader mReader = new BufferedReader(new InputStreamReader(System.in));
+
 
     /**
      * This method prompts administrator for an item to fill the jar with and adds it to the Jar object.
@@ -20,7 +21,7 @@ public class Prompter {
     private void promptForJarFiller() {
 
         System.out.println("For Administrator:\n");
-        System.out.println("Please, enter what would you like to fill the jar with:  ");
+        System.out.print("Please, enter what would you like to fill the jar with:  ");
         String jarFiller = null;
         try {
             jarFiller = mReader.readLine();
@@ -35,9 +36,11 @@ public class Prompter {
      * This method prompts for the number of items in the jar and adds it to the Jar object.
      */
     private void promptForMaxNumberOfItems() {
+        //TODO: Format the jarFiller string so that the first letter is capitalized in the sentence.
         System.out.printf("%s is an excellent choice! How many pieces of %s would you like in the jar?  ", mJar.getJarFiller(),
-                                                                                                           mJar.getJarFiller());
+                mJar.getJarFiller());
         String numberAsString = "";
+        boolean isPositiveNumber = true;
         do {
             try {
                 numberAsString = mReader.readLine();
@@ -45,12 +48,17 @@ public class Prompter {
                 System.out.println("Unable to read in the input.");
                 e.printStackTrace();
             }
-            checkIfPositiveInteger(numberAsString);
-        }
+            isPositiveNumber = checkIfPositiveInteger(numberAsString);
+            if (isPositiveNumber == false) {
+                System.out.println("This is not a valid number. Please, enter a positive whole number");
+            }
+        } while (!isPositiveNumber);
+        mJar.setMaxNumberOfItems(Integer.parseInt(numberAsString));
     }
 
     /**
      * This method prompts Administrator for data needed to create an instance of a com.olgaivancic.model.Jar class.
+     *
      * @return Returns a com.olgaivancic.model.Jar object.
      */
     public Jar promptAdministrator() {
@@ -61,15 +69,23 @@ public class Prompter {
     }
 
     /**
-     *  This method checks if the parameter is a positive integer.
+     * This method checks if the parameter is a positive integer.
+     *
      * @param numberAsString
      */
-    public static void checkIfPositiveInteger(String numberAsString) {
+    public static boolean checkIfPositiveInteger(String numberAsString) {
 
-        int number = Integer.parseInt(numberAsString);
-        if(number <= 0) {
-            System.out.println("This is not a valid number. Please, enter a positive whole number");
+        boolean isPositiveNumber = true;
+        int number = 0;
+        try{
+            number = Integer.parseInt(numberAsString);
+        } catch (NumberFormatException nfe){
+            System.out.println("The input is not a number!");
+            nfe.printStackTrace();
         }
-
+        if (number <= 0) {
+            isPositiveNumber = false;
+        }
+        return isPositiveNumber;
     }
 }

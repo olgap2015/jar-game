@@ -16,9 +16,6 @@ public class Game {
         prompter.promptAdministrator();
 
 
-        Jar jar = new Jar(jarFiller, numberOfItems);
-
-
     }
 
 }

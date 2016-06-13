@@ -8,6 +8,11 @@ public class Jar {
     private String mJarFiller;
     private int mMaxNumberOfItems;
 
+    public Jar(){
+        mJarFiller = "";
+        mMaxNumberOfItems = 0;
+    }
+
     public Jar(String jarFiller, int maxNumberOfItems) {
         mJarFiller = jarFiller;
         mMaxNumberOfItems = maxNumberOfItems;
