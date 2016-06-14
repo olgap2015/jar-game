@@ -9,15 +9,22 @@ import com.olgaivancic.view.Prompter;
 public class Game {
 
     public static void main(String[] args) {
-        // Your code here
-        Jar jar = new Jar();
 
-        Prompter prompter = new Prompter(jar);
+        boolean oneMoreGame;
+        do {
+            Prompter prompter = new Prompter();
 
-        //Prompt administrator for the jar filler and the number of items in the jar.
-        prompter.promptAdministrator();
-        prompter.play();
+            //Prompt administrator for the jar filler and the number of items in the jar.
+            String jarFiller = prompter.promptForJarFiller();
+            int maxNumberOfItems = prompter.promptForMaxNumberOfItems(jarFiller);
 
+            // Create the jar
+            Jar jar = new Jar(jarFiller, maxNumberOfItems);
+            prompter.play();
+
+            // Prompt if the Player would want to play one more game.
+            oneMoreGame = prompter.checkIfWantOneMoreGame();
+        } while (oneMoreGame);
 
     }
 

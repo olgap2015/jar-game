@@ -9,14 +9,14 @@ public class Jar {
 
     private String mJarFiller;
     private int mMaxNumberOfItems;
-    private int mRandomNumberOfItems;
+    private int mCorrectAnswer;
 
-    public int getRandomNumberOfItems() {
-        return mRandomNumberOfItems;
+    public int getCorrectAnswer() {
+        return mCorrectAnswer;
     }
 
-    public void setRandomNumberOfItems(int randomNumberOfItems) {
-        mRandomNumberOfItems = randomNumberOfItems;
+    public void setCorrectAnswer(int correctAnswer) {
+        mCorrectAnswer = correctAnswer;
     }
 
     public Jar() {
@@ -71,7 +71,29 @@ public class Jar {
      */
     public int generateRandomNumber() {
         Random random = new Random();
-        int randomNumber = random.nextInt(mMaxNumberOfItems);
-        return randomNumber;
+        return random.nextInt(mMaxNumberOfItems);
+    }
+
+    /**
+     * This method parses integer out of the String parameter and evaluates whether the guess equals the bumber of items in the jar.
+     *
+     * @param guess
+     * @return Returns true if the guess is correct and false if the guess is not correct.
+     */
+    public boolean checkIfGuessIsCorrect(int guess) {
+
+        return guess == mCorrectAnswer;
+    }
+
+    /**
+     * This method evaluates whether the guess was too high or too low.
+     *
+     * @param guess
+     * @return Returns 'Too low' is the guess is lower than the answer and 'Too high" if the guess is higher than the answer.
+     */
+    public String evaluateGuess(int guess) {
+        if (guess < mCorrectAnswer) {
+            return "Too low!";
+        } else return "Too high!";
     }
 }
