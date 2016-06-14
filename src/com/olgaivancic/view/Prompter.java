@@ -5,6 +5,7 @@ import com.olgaivancic.model.Jar;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Random;
 
 /**
  * This class is the View part of the MVC pattern of the project. It is responsible for the input/output functionality.
@@ -14,14 +15,17 @@ public class Prompter {
     private Jar mJar = new Jar();
     private BufferedReader mReader = new BufferedReader(new InputStreamReader(System.in));
 
+    public Prompter (Jar jar) {
+        mJar = jar;
+    }
+
 
     /**
      * This method prompts administrator for an item to fill the jar with and adds it to the Jar object.
      */
     private void promptForJarFiller() {
 
-        System.out.println("For Administrator:\n");
-        System.out.print("Please, enter what would you like to fill the jar with:  ");
+        System.out.print("Administrator - enter what would you like to fill the jar with:  ");
         String jarFiller = null;
         try {
             jarFiller = mReader.readLine();
@@ -48,10 +52,7 @@ public class Prompter {
                 System.out.println("Unable to read in the input.");
                 e.printStackTrace();
             }
-            isPositiveNumber = checkIfPositiveInteger(numberAsString);
-            if (isPositiveNumber == false) {
-                System.out.println("This is not a valid number. Please, enter a positive whole number");
-            }
+            isPositiveNumber = mJar.checkIfMaxNumberIsPositive(numberAsString);
         } while (!isPositiveNumber);
         mJar.setMaxNumberOfItems(Integer.parseInt(numberAsString));
     }
@@ -69,23 +70,15 @@ public class Prompter {
     }
 
     /**
-     * This method checks if the parameter is a positive integer.
-     *
-     * @param numberAsString
+     * This method prompts Player and contains the I/O logic of the game.
      */
-    public static boolean checkIfPositiveInteger(String numberAsString) {
+    public void play() {
+        // Generate a random integer.
+        int randomNumber = mJar.generateRandomNumber();
 
-        boolean isPositiveNumber = true;
-        int number = 0;
-        try{
-            number = Integer.parseInt(numberAsString);
-        } catch (NumberFormatException nfe){
-            System.out.println("The input is not a number!");
-            nfe.printStackTrace();
-        }
-        if (number <= 0) {
-            isPositiveNumber = false;
-        }
-        return isPositiveNumber;
+        // Prompt the Player for the number
+        System.out.printf("Player: you need to guess the number of %s in the jar.%n", mJar.getJarFiller());
+        System.out.println("Please, enter a number between 1 and "+ randomNumber + 1);
     }
+
 }

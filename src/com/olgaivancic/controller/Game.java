@@ -10,10 +10,13 @@ public class Game {
 
     public static void main(String[] args) {
         // Your code here
-        Prompter prompter = new Prompter();
+        Jar jar = new Jar();
+
+        Prompter prompter = new Prompter(jar);
 
         //Prompt administrator for the jar filler and the number of items in the jar.
         prompter.promptAdministrator();
+        prompter.play();
 
 
     }
