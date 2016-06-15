@@ -46,24 +46,6 @@ public class Jar {
         mMaxNumberOfItems = maxNumberOfItems;
     }
 
-
-    public boolean checkIfMaxNumberIsPositive(String numberAsString) {
-
-        boolean isPositiveNumber = true;
-        int number = 0;
-        try {
-            number = Integer.parseInt(numberAsString);
-        } catch (NumberFormatException nfe) {
-            System.out.println("The input is not a number!");
-            nfe.printStackTrace();
-        }
-        if (number <= 0) {
-            isPositiveNumber = false;
-            System.out.println("Please, enter a positive whole number");
-        }
-        return isPositiveNumber;
-    }
-
     /**
      * This method generates a random integer from the range of numbers between 0 and the maxim number specified.
      *

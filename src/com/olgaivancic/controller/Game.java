@@ -15,15 +15,18 @@ public class Game {
             Prompter prompter = new Prompter();
 
             //Prompt administrator for the jar filler and the number of items in the jar.
-            String jarFiller = prompter.promptForJarFiller();
+            String jarFiller = prompter.promptForJarFiller().toLowerCase();
             int maxNumberOfItems = prompter.promptForMaxNumberOfItems(jarFiller);
 
             // Create the jar
             Jar jar = new Jar(jarFiller, maxNumberOfItems);
-            prompter.play();
+            prompter.play(jar);
 
             // Prompt if the Player would want to play one more game.
             oneMoreGame = prompter.checkIfWantOneMoreGame();
+            if (!oneMoreGame) {
+                System.out.println("Goodbye!");
+            }
         } while (oneMoreGame);
 
     }
