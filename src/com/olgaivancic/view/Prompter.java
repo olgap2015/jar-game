@@ -1,6 +1,7 @@
 package com.olgaivancic.view;
 
 import com.olgaivancic.model.Jar;
+import com.olgaivancic.model.Player;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.io.InputStreamReader;
 public class Prompter {
 
     private Jar mJar;
+    private Player mPlayer;
     private BufferedReader mReader = new BufferedReader(new InputStreamReader(System.in));
 
     /**
@@ -38,7 +40,7 @@ public class Prompter {
     public int promptForMaxNumberOfItems(String jarFiller) {
         //TODO: Format the jarFiller string so that the first letter is capitalized in the sentence.
         String capitalizedJarFiller = jarFiller.toUpperCase().charAt(0) + jarFiller.substring(1);
-        System.out.printf("%s is (are) an excellent choice! What is the maximum amount of pieces of %s would you like to have in the jar?  ",
+        System.out.printf("%s is (are) an excellent choice! What is the maximum amount of %s would you like to have in the jar?  ",
                 capitalizedJarFiller,
                 jarFiller);
         String numberAsString = "";
@@ -59,28 +61,32 @@ public class Prompter {
     /**
      * This method prompts Player and contains the I/O logic of the game.
      *
-     * @param jar
+     * @param player, jar
      */
-    public void play(Jar jar) {
+    public int play(Player player, Jar jar) {
         // Generate a random integer and set the correct answer.
         mJar = jar;
+        mPlayer = player;
         int randomNumber = mJar.generateRandomNumber();
         mJar.setCorrectAnswer(randomNumber + 1);
 
         // Output the rules
-        System.out.printf("Player - you need to guess the number of %s in the jar. Enter a number between 1 and %d%n",
+        System.out.printf("Hi %s, your goal is to guess the number of %s in the jar. Enter a number between 1 and %d%n",
+                mPlayer.getName(),
                 mJar.getJarFiller(),
                 mJar.getMaxNumberOfItems());
 
-        // Prompt Player for guess until the guess is correct while coounting the valid guesses
+        // Prompt Player for guess until the guess is correct while counting the valid guesses
         int amountOfTries = promptForGuessUntilSolved();
 
         // Output the amount of tries it took to guess.
-        System.out.printf("Congratulations! You guessed that there are %d pieces of %s in the jar. ",
+        System.out.printf("Good job, %s! You guessed that there are %d pieces of %s in the jar. ",
+                mPlayer.getName(),
                 mJar.getCorrectAnswer(),
                 mJar.getJarFiller());
         System.out.printf("It took you %d tries to guess the correct answer.%n", amountOfTries);
 
+        return amountOfTries;
     }
 
     /**
@@ -138,7 +144,7 @@ public class Prompter {
     private boolean checkIfGuessIsValid(int guess) {
         boolean isValid = true;
         if (guess <= 0 || guess > mJar.getMaxNumberOfItems()) {
-            System.out.printf("The guess you entered is not within the range 1 - %d. Please, try again.%n",
+            System.out.printf("The guess you entered is not within the range 1 - %d, so it doesn't count. Please, try again.%n",
                     mJar.getMaxNumberOfItems());
             isValid = false;
         }
@@ -194,4 +200,18 @@ public class Prompter {
         }
         return isPositiveNumber;
     }
+
+    public String promptForPlayerName() {
+        System.out.println("Player - please, enter you name:  ");
+        String name = "";
+        try {
+            name = mReader.readLine();
+        } catch (IOException e) {
+            System.out.println("Unable to read the input. Please, try again.");
+            e.printStackTrace();
+        }
+
+        return name;
+    }
+
 }
