@@ -59,7 +59,7 @@ public class Jar {
     /**
      * This method parses integer out of the String parameter and evaluates whether the guess equals the bumber of items in the jar.
      *
-     * @param guess
+     * @param guess current guess
      * @return Returns true if the guess is correct and false if the guess is not correct.
      */
     public boolean checkIfGuessIsCorrect(int guess) {
@@ -70,7 +70,7 @@ public class Jar {
     /**
      * This method evaluates whether the guess was too high or too low.
      *
-     * @param guess
+     * @param guess Current guess
      * @return Returns 'Too low' is the guess is lower than the answer and 'Too high" if the guess is higher than the answer.
      */
     public String evaluateGuess(int guess) {

@@ -13,21 +13,29 @@ import java.io.InputStreamReader;
 public class Prompter {
 
     private Jar mJar;
-    private Player mPlayer;
     private BufferedReader mReader = new BufferedReader(new InputStreamReader(System.in));
+
+    Player player;
 
     /**
      * This method prompts administrator for an item to fill the jar with and adds it to the Jar object.
      */
     public String promptForJarFiller() {
 
-        System.out.print("Administrator - what would you like to put in the jar?  ");
+        System.out.print("\nAdministrator - what would you like to put in the jar?  ");
         String jarFiller = null;
-        try {
-            jarFiller = mReader.readLine();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        do {
+            try {
+                jarFiller = mReader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if (jarFiller.length() == 0) {
+                System.out.println("Please, enter a jar filler!");
+            }
+        } while (jarFiller.length() == 0);
+
         return jarFiller;
     }
 
@@ -35,14 +43,13 @@ public class Prompter {
     /**
      * This method prompts for the number of items in the jar and adds it to the Jar object.
      *
-     * @param jarFiller
+     * @param jarFiller represents the item that is filled the jar with.
      */
     public int promptForMaxNumberOfItems(String jarFiller) {
         //TODO: Format the jarFiller string so that the first letter is capitalized in the sentence.
         String capitalizedJarFiller = jarFiller.toUpperCase().charAt(0) + jarFiller.substring(1);
-        System.out.printf("%s is (are) an excellent choice! What is the maximum amount of %s would you like to have in the jar?  ",
-                capitalizedJarFiller,
-                jarFiller);
+        System.out.printf("%s is (are) an excellent choice!%n", capitalizedJarFiller);
+        System.out.printf("%nAdministrator - what is the maximum amount of %s that can fit in the jar?  ", jarFiller);
         String numberAsString = "";
         boolean isPositiveNumber = true;
         do {
@@ -50,10 +57,14 @@ public class Prompter {
                 numberAsString = mReader.readLine();
             } catch (IOException e) {
                 System.out.println("Unable to read the input. Please, try again");
-                e.printStackTrace();
             }
-            isPositiveNumber = checkIfMaxNumberIsPositive(numberAsString);
-        } while (!isPositiveNumber);
+            if (numberAsString.length() == 0) {
+                System.out.println("Please, enter a positive whole number!");
+            } else {
+                isPositiveNumber = checkIfMaxNumberIsPositive(numberAsString);
+            }
+        } while (!isPositiveNumber || numberAsString.length() == 0);
+        System.out.println("Thank you!");
 
         return Integer.parseInt(numberAsString);
     }
@@ -61,18 +72,18 @@ public class Prompter {
     /**
      * This method prompts Player and contains the I/O logic of the game.
      *
-     * @param player, jar
+     * @param aPlayer, jar
      */
-    public int play(Player player, Jar jar) {
+    public int play(Player aPlayer, Jar jar) {
         // Generate a random integer and set the correct answer.
         mJar = jar;
-        mPlayer = player;
+        player = aPlayer;
         int randomNumber = mJar.generateRandomNumber();
         mJar.setCorrectAnswer(randomNumber + 1);
 
         // Output the rules
-        System.out.printf("Hi %s, your goal is to guess the number of %s in the jar. Enter a number between 1 and %d%n",
-                mPlayer.getName(),
+        System.out.printf("%n%s, your goal is to guess the number of %s in the jar. Enter a number between 1 and %d%n%n",
+                player.getName(),
                 mJar.getJarFiller(),
                 mJar.getMaxNumberOfItems());
 
@@ -80,11 +91,11 @@ public class Prompter {
         int amountOfTries = promptForGuessUntilSolved();
 
         // Output the amount of tries it took to guess.
-        System.out.printf("Good job, %s! You guessed that there are %d pieces of %s in the jar. ",
-                mPlayer.getName(),
+        System.out.printf("%nGood job, %s! You guessed that there are %d pieces of %s in the jar. ",
+                player.getName(),
                 mJar.getCorrectAnswer(),
                 mJar.getJarFiller());
-        System.out.printf("It took you %d tries to guess the correct answer.%n", amountOfTries);
+        System.out.printf("%nIt took you %d tries to guess the correct answer.%n%n", amountOfTries);
 
         return amountOfTries;
     }
@@ -108,7 +119,6 @@ public class Prompter {
                     guessAsString = mReader.readLine();
                 } catch (IOException e) {
                     System.out.println("\nNot able to read the input!");
-                    e.printStackTrace();
                 }
                 // Convert String into int
                 try {
@@ -138,8 +148,8 @@ public class Prompter {
     /**
      * This method checks is the guess is within the range of 1 to the maximum amount of items in the jar.
      *
-     * @param guess
-     * @return Returns true if the guess is valid and false if the guess is not valid.
+     * @param guess number that represents current guess.
+     * @return True if the guess is valid and false if the guess is not valid.
      */
     private boolean checkIfGuessIsValid(int guess) {
         boolean isValid = true;
@@ -152,8 +162,8 @@ public class Prompter {
     }
 
     public boolean checkIfWantOneMoreGame() {
-        System.out.println("Would you like to play another game? " +
-                "Enter \"yes\" if you would like to play another game and enter \"quit\" if you are done playing.");
+        System.out.println("Would you like to play another game?");
+        System.out.println("Enter \"yes\" if you would like to play another game and enter \"quit\" if you are done playing.");
         boolean oneMoreGame = false;
         String input = "";
         boolean isValidInput = false;
@@ -162,7 +172,6 @@ public class Prompter {
                 input = mReader.readLine();
             } catch (IOException e) {
                 System.out.println("Not able to read the input!");
-                e.printStackTrace();
             }
 
             // validate the input
@@ -191,8 +200,7 @@ public class Prompter {
         try {
             number = Integer.parseInt(numberAsString);
         } catch (NumberFormatException nfe) {
-            System.out.println("The input is not a number!");
-            nfe.printStackTrace();
+            System.out.println("The input is not a valid number!");
         }
         if (number <= 0) {
             isPositiveNumber = false;
@@ -202,14 +210,20 @@ public class Prompter {
     }
 
     public String promptForPlayerName() {
-        System.out.println("Player - please, enter you name:  ");
-        String name = "";
-        try {
-            name = mReader.readLine();
-        } catch (IOException e) {
-            System.out.println("Unable to read the input. Please, try again.");
-            e.printStackTrace();
-        }
+        System.out.print("Player - please, enter you name:  ");
+        String name = null;
+        do {
+            try {
+                name = mReader.readLine();
+            } catch (IOException e) {
+                System.out.println("Unable to read the input. Please, try again.");
+            }
+
+            if (name.length() == 0) {
+                System.out.println("Please, enter a name!");
+            }
+
+        } while (name.length() == 0);
 
         return name;
     }

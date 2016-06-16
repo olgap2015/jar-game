@@ -1,7 +1,7 @@
 package com.olgaivancic.model;
 
 /**
- * Created by Olga on 6/16/2016.
+ * This Class represents the Player of the game.
  */
 public class Player {
 
@@ -33,7 +33,7 @@ public class Player {
      * This method compares current score to the player's highest score. It also updates
      * mHighestScore if the current score is better (lower).
      *
-     * @param score
+     * @param score current score
      * @return Returns 0 if the scores are equal, -1 is the current score is lower,
      * 1 - if the the current score is higher than the highest score.
      */

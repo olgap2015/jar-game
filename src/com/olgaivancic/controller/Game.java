@@ -11,19 +11,20 @@ public class Game {
 
     public static void main(String[] args) {
 
+        Prompter prompter = new Prompter();
+
+        // Prompt Player for his/her name
+        String playerName = prompter.promptForPlayerName();
+
+        // Create a player
+        Player player = new Player(playerName);
+
         boolean oneMoreGame;
         do {
-            Prompter prompter = new Prompter();
 
             //Prompt administrator for the jar filler and the number of items in the jar.
             String jarFiller = prompter.promptForJarFiller().toLowerCase();
             int maxNumberOfItems = prompter.promptForMaxNumberOfItems(jarFiller);
-
-            // Prompt Player for his/her name
-            String playerName = prompter.promptForPlayerName();
-
-            // Create record for a player
-            Player player = new Player(playerName);
 
             // Create the jar
             Jar jar = new Jar(jarFiller, maxNumberOfItems);
@@ -33,19 +34,22 @@ public class Game {
 
             // Check if the current score is better than previous scores for this player
             // and update the record if the current score if better.
-            int scoreEvaluation = player.evaluateCurrentScore(score);
-            String message = "";
-            if (player.getHighestScore() != 0) {
+            if (player.getHighestScore() == 0) {
+                player.setHighestScore(score);
+            } else {
+                int scoreEvaluation = player.evaluateCurrentScore(score);
+
                 if (scoreEvaluation == -1) {
                     System.out.printf("Congratulations, %s! You've just set a new personal record - " +
-                                    "you guessed the number of items in the jar in %d attempts.%n",
+                                    "you guessed the number of items in the jar in %d attempts.%n%n",
                             player.getName(), player.getHighestScore());
+                    player.setHighestScore(score);
                 } else if (scoreEvaluation == 0) {
                     System.out.println("Your current score equals your best recorded score. " +
-                            "You are on your way to set a new personal record!");
+                            "You are on your way to set a new personal record!%n");
                 } else if (scoreEvaluation == 1) {
                     System.out.printf("This is not the best score you've had. Your best score is %d. " +
-                            "Keep trying!%n", player.getHighestScore());
+                            "Keep trying!%n%n", player.getHighestScore());
                 }
             }
 
