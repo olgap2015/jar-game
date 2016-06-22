@@ -46,7 +46,7 @@ public class Prompter {
      * @param jarFiller represents the item that is filled the jar with.
      */
     public int promptForMaxNumberOfItems(String jarFiller) {
-        //TODO: Format the jarFiller string so that the first letter is capitalized in the sentence.
+        //Format the jarFiller string so that the first letter is capitalized in the sentence.
         String capitalizedJarFiller = jarFiller.toUpperCase().charAt(0) + jarFiller.substring(1);
         System.out.printf("%s is (are) an excellent choice!%n", capitalizedJarFiller);
         System.out.printf("%nAdministrator - what is the maximum amount of %s that can fit in the jar?  ", jarFiller);
